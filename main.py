@@ -1,3 +1,4 @@
+
 import streamlit as st
 import re
 import string
@@ -75,6 +76,11 @@ st.markdown("""
         color: #b0b0cc;
         margin-top: 2rem;
         
+    }
+    .stCode {
+       text-align: center;
+        font-size: 1rem;
+
     }
     
 
@@ -199,23 +205,9 @@ with tabs[0]:
         password = generate_password(length, use_digits, use_special)
         st.session_state['generated_password'] = password
         
-        st.markdown(f"""
-        <div class="password-display">
-            {password}
-        </div>
-        """, unsafe_allow_html=True)
+        st.code(password, language=None)
         
         display_strength(password)
-
-    if 'generated_password' in st.session_state:
-        if st.button("Copy to Clipboard", use_container_width=True):
-            st.markdown(f"""
-            <script>
-                navigator.clipboard.writeText('{st.session_state['generated_password']}');
-            </script>
-            """, unsafe_allow_html=True)
-            st.success("Password copied to clipboard!", icon="✅")
-    
 
 with tabs[1]:
     
@@ -225,8 +217,6 @@ with tabs[1]:
         display_strength(manual_password)
     else:
         st.info("Enter a password above to see its strength analysis")
-    
-
 
 
 st.markdown("""
@@ -234,9 +224,3 @@ st.markdown("""
     Made with ❤️ by Nihal Khan Ghauri
 </div>
 """, unsafe_allow_html=True)
-
-
-
-
-
-
