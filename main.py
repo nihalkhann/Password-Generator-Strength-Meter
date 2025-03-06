@@ -200,9 +200,11 @@ with tabs[0]:
         password = generate_password(length, use_digits, use_special)
         st.session_state['generated_password'] = password
         
+        escaped_password = password.replace("<", "&lt;").replace(">", "&gt;")
+        
         st.markdown(f"""
         <div class="password-display">
-            {password}
+            {escaped_password}
         </div>
         """, unsafe_allow_html=True)
         
@@ -210,8 +212,12 @@ with tabs[0]:
 
     if 'generated_password' in st.session_state:
         if st.button("Copy to Clipboard", use_container_width=True):
-            pyperclip.copy(st.session_state['generated_password'])
-            st.success("Password copied to clipboard!", icon="✅")
+            try:
+                pyperclip.copy(st.session_state['generated_password'])
+                st.success("Password copied to clipboard!", icon="✅")
+            except pyperclip.PyperclipException:
+                st.code(st.session_state['generated_password'], language=None)
+                st.info("⚠️ Clipboard copy not available. Please manually select and copy the password above.")
     
 
 with tabs[1]:
