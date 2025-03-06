@@ -2,7 +2,6 @@ import streamlit as st
 import re
 import string
 import random
-import pyperclip
 
 
 st.set_page_config(page_title="Nihal : Password Generator & Strength Meter", page_icon="🔑", layout="centered")
@@ -200,11 +199,9 @@ with tabs[0]:
         password = generate_password(length, use_digits, use_special)
         st.session_state['generated_password'] = password
         
-        escaped_password = password.replace("<", "&lt;").replace(">", "&gt;")
-        
         st.markdown(f"""
         <div class="password-display">
-            {escaped_password}
+            {password}
         </div>
         """, unsafe_allow_html=True)
         
@@ -212,12 +209,12 @@ with tabs[0]:
 
     if 'generated_password' in st.session_state:
         if st.button("Copy to Clipboard", use_container_width=True):
-            try:
-                pyperclip.copy(st.session_state['generated_password'])
-                st.success("Password copied to clipboard!", icon="✅")
-            except pyperclip.PyperclipException:
-                st.code(st.session_state['generated_password'], language=None)
-                st.info("⚠️ Clipboard copy not available. Please manually select and copy the password above.")
+            st.markdown(f"""
+            <script>
+                navigator.clipboard.writeText('{st.session_state['generated_password']}');
+            </script>
+            """, unsafe_allow_html=True)
+            st.success("Password copied to clipboard!", icon="✅")
     
 
 with tabs[1]:
